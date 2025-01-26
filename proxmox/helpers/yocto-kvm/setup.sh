@@ -249,7 +249,8 @@ function set_download_url() {
       if [ -n "$URL" ]; then
         # check if the URL is valid
         if curl -s -I $URL | grep -q "200 OK"; then
-          echo -e "${DGN}Using Download URL: ${BGN}$URL${CL}"
+          # print url first 30 characters
+          echo -e "${DGN}Using Download URL: ${BGN}${URL:0:30}${CL}"
           break
         else
           echo -e "${CROSS}${RD} Invalid URL${CL}"
@@ -283,6 +284,9 @@ arch_check
 pve_check
 ssh_check
 start_script
+
+msg_info "Setting Hostname"
+get_vm_hn
 
 msg_info "Validating Storage"
 validate_storage

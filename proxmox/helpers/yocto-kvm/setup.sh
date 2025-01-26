@@ -8,13 +8,7 @@ NEXTID=$(pvesh get /cluster/nextid)
 WHIPTAIL_BACKTITLE="${FOOTER}"
 WHIPTAIL_TITLE="Yocto Linux KVM"
 
-# KVM Default Settings
-
-
-# Set the trap handlers
-# When an ERR signal is received, call the error_handler function
 trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
-# When the script exits unexpectedly or (Ctrl+C), call the cleanup function
 trap cleanup EXIT
 
 # Set default settings for the machine to be created and print them to the console
@@ -230,7 +224,6 @@ function advanced_settings() {
 }
 
 function start_script() {
-  year=$(date +%Y)
   if (whiptail --backtitle "${WHIPTAIL_BACKTITLE}" --title "SETTINGS" --yesno "Use Default Settings?" --no-button Advanced 10 58); then
     header_info
     echo -e "${BL}Using Default Settings${CL}"
@@ -250,7 +243,7 @@ function set_download_url() {
         # check if the URL is valid
         if curl -s -I $URL | grep -q "200 OK"; then
           # print url first 30 characters
-          echo -e "${DGN}Using Download URL: ${BGN}${URL:0:30}${CL}"
+          echo -e "${DGN}Using Download URL: ${BGN}${URL:0:30}***${CL}"
           break
         else
           echo -e "${CROSS}${RD} Invalid URL${CL}"
@@ -285,21 +278,21 @@ pve_check
 ssh_check
 start_script
 
-msg_info "Setting Hostname"
+msg_info "Setting VM Name"
 get_vm_hn
 
 msg_info "Validating Storage"
 validate_storage
 
 msg_ok "Using ${CL}${BL}$STORAGE${CL} ${GN}for Storage Location."
-
 msg_ok "Virtual Machine ID is ${CL}${BL}$VMID${CL}."
+
 msg_info "Retrieving the URL for the Yocto Linux .qcow2 Disk Image\n"
 set_download_url
 
 FILE="${HN}.qcow2"
 sleep 2
-msg_ok "${CL}${BL}${URL}${CL}"
+msg_ok "${CL}${BL}${URL:0:30}***${CL}"
 wget -q --show-progress $URL -O $FILE
 echo -en "\e[1A\e[0K"
 

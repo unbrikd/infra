@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-#source <(curl -s https://raw.githubusercontent.com/unbrikd/infra/master/proxmox/misc/common.sh)
+source <(curl -s https://raw.githubusercontent.com/unbrikd/infra/refs/heads/feature/add-pve-helper-for-yocto-kvm/proxmox/misc/common.sh)
 
 # KVM Setup Details
 GEN_MAC=02:$(openssl rand -hex 5 | awk '{print toupper($0)}' | sed 's/\(..\)/\1:/g; s/.$//')
